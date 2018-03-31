@@ -36,7 +36,7 @@ fastify.route({
 // Run the server!
 const start = async () => {
     try {
-        await fastify.listen(3000,'0.0.0.0', function () {
+        await fastify.listen(3389,'0.0.0.0', function () {
             console.log(`server listening on ${fastify.server.address().port}`)
         })
     } catch (err) {
