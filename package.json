@@ -1,0 +1,23 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "description": "to build server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brant9527/node-server.git"
+  },
+  "author": "brant9527",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brant9527/node-server/issues"
+  },
+  "homepage": "https://github.com/brant9527/node-server#readme",
+  "dependencies": {
+    "fastify": "^1.2.0",
+    "serve-static": "^1.13.2"
+  }
+}
