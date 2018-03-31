@@ -4,7 +4,7 @@ const path = require('path')
 // Declare a route
 fastify.use('/public', serveStatic(path.resolve(__dirname, 'public')))
 fastify.use('/public/static', serveStatic(path.resolve(__dirname, 'static')))
-fastify.get('/', async (request, reply) => {
+fastify.get('/hello', async (request, reply) => {
     return { hello: 'world' }
 })
 fastify.route({
@@ -36,7 +36,7 @@ fastify.route({
 // Run the server!
 const start = async () => {
     try {
-        await fastify.listen(3389,'0.0.0.0', function () {
+        await fastify.listen(3389, function () {
             console.log(`server listening on ${fastify.server.address().port}`)
         })
     } catch (err) {
