@@ -33,6 +33,7 @@ fastify.route({
         return { hello: 'world' }
     }
 })
+console.log(1)
 // Run the server!
 const start = async () => {
     try {
