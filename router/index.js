@@ -9,10 +9,6 @@ app.use('/', express.static('public'))
 app.use(bodyParser.json())
 
 app.all('*', function (req, res, next) {
-<<<<<<< HEAD
-=======
-
->>>>>>> f934857a2522fce64599f5a68bdaabcd1f13aa74
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
@@ -81,12 +77,10 @@ app.post('/login',function(request,reply){
             reply.send(err)
         }
         if (docs.length>0) {
-<<<<<<< HEAD
             console.log(docs)
             reply.send({ result: true, accountId: docs[0]._id})
-=======
-            reply.send({result:true})
->>>>>>> f934857a2522fce64599f5a68bdaabcd1f13aa74
+
+
         }else{
             reply.status(500).send({result:false,message:'用户账号或密码错误'})
         }
