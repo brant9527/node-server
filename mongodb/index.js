@@ -19,5 +19,8 @@ let accountScheme = new mongoose.Schema({
     psw: String
 })
 mongoDo.tripModel = mongoose.model('trip', tripScheme);
+
 mongoDo.accountModel = mongoose.model('account', accountScheme);
+
+
 module.exports = mongoDo

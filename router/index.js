@@ -9,6 +9,10 @@ app.use('/', express.static('public'))
 app.use(bodyParser.json())
 
 app.all('*', function (req, res, next) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> f934857a2522fce64599f5a68bdaabcd1f13aa74
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
@@ -33,6 +37,7 @@ app.get('/car/gettrip', function (request, reply){
     })
    
 })
+
 app.get('/car/gettripByPhone', function (request, reply) {
     console.log(request.query)
     mongoDo.tripModel.find({ creatTime: { $lt: Number(request.query.num) } }, null, { skip: Number(request.query.currentIndex), limit: 10 }, function (err, docs) {
@@ -53,6 +58,7 @@ app.get('/isLogin', function (request, reply) {
     })
 
 })
+
 app.post('/resign', function(request, reply) {
     mongoDo.account.find({ num: request.body.num }, function (err, docs){
         console.log(err,docs)
@@ -75,8 +81,12 @@ app.post('/login',function(request,reply){
             reply.send(err)
         }
         if (docs.length>0) {
+<<<<<<< HEAD
             console.log(docs)
             reply.send({ result: true, accountId: docs[0]._id})
+=======
+            reply.send({result:true})
+>>>>>>> f934857a2522fce64599f5a68bdaabcd1f13aa74
         }else{
             reply.status(500).send({result:false,message:'用户账号或密码错误'})
         }
