@@ -36,11 +36,12 @@ app.get('/car/gettrip', function (request, reply){
 
 app.get('/car/gettripByPhone', function (request, reply) {
     console.log(request.query)
-    mongoDo.tripModel.find({ creatTime: { $lt: Number(request.query.num) } }, null, { skip: Number(request.query.currentIndex), limit: 10 }, function (err, docs) {
+    mongoDo.tripModel.find({ accountId: request.query.accountId}, function (err, docs) {
         if (err) {
             reply.send(err)
         }
-        reply.send(docs)
+        if (docs.length < 1) reply.status(404).send({message:'没有相关记录'})
+        reply.send({ carList:docs})
     })
 
 })
@@ -72,7 +73,7 @@ app.post('/resign', function(request, reply) {
     
 })
 app.post('/login',function(request,reply){
-    mongoDo.account.find(request.body,function(err,docs){
+    mongoDo.accountModel.find(request.body,function(err,docs){
         if(err) {
             reply.send(err)
         }

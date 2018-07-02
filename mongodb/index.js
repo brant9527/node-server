@@ -12,7 +12,8 @@ let tripScheme = new mongoose.Schema({
     roleValue: Number,
     introduction: String,
     creatTime:Number,
-    money:Number
+    money:Number,
+    accountId:String
 })
 let accountScheme = new mongoose.Schema({
     num: String,
