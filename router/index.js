@@ -15,7 +15,7 @@ app.all('*', function (req, res, next) {
     next();
 })
 app.post('/car/settrip',function(request,reply){
-    new mongoDo.tripModel(request.body).save(function (err,docs) {   
+    mongoDo.tripModel.create(request.body, function (err,docs) {   
         if(err) {
             reply.send(err)
         }
@@ -35,13 +35,12 @@ app.get('/car/gettrip', function (request, reply){
 })
 
 app.get('/car/gettripByPhone', function (request, reply) {
-    console.log(request.query)
     mongoDo.tripModel.find({ accountId: request.query.accountId}, function (err, docs) {
         if (err) {
             reply.send(err)
         }
-        if (docs.length < 1) reply.status(404).send({message:'没有相关记录'})
-        reply.send({ carList:docs})
+        if (docs.length < 1) reply.status(500).send({message:'没有相关记录'})
+        else reply.send({ carList:docs})
     })
 
 })
@@ -51,19 +50,20 @@ app.get('/isLogin', function (request, reply) {
         if (err) {
             reply.send(err)
         }
-        reply.send({ result: true})
+        if (docs.length>0) reply.send({ result: true})
+        else reply.send({result:false})
     })
 
 })
 
 app.post('/resign', function(request, reply) {
-    mongoDo.account.find({ num: request.body.num }, function (err, docs){
+    mongoDo.accountModel.find({ num: request.body.num }, function (err, docs){
         console.log(err,docs)
         if (err) {
             reply.send(err)
         }
         if (docs.length > 0) return reply.send({ result: false })
-        new mongoDo.account(request.body).save(function (err, docs) {
+         mongoDo.accountModel.create(request.body, function (err, docs) {
             if (err) {
                 reply.send(err)
             }
@@ -80,10 +80,20 @@ app.post('/login',function(request,reply){
         if (docs.length>0) {
             console.log(docs)
             reply.send({ result: true, accountId: docs[0]._id})
-
-
         }else{
             reply.status(500).send({result:false,message:'用户账号或密码错误'})
+        }
+    })
+})
+app.post('/deleteTrip', function (request, reply) {
+    mongoDo.tripModel.findByIdAndRemove(request.body.id, function (err, docs) {
+        if (err) {
+            reply.send(err)
+        }
+        if (docs) {
+                reply.send({ result: true })
+        } else {
+            reply.status(500).send({ result: false, message: '没有记录' })
         }
     })
 })

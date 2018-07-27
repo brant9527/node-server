@@ -1,7 +1,5 @@
 let app = require('./router/index')
 
-const serveStatic = require('serve-static')//访问静态文件
-const path = require('path')
 require('./mongodb/index')
 
 
