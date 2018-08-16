@@ -14,6 +14,9 @@ app.all('*', function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     next();
 })
+/**
+ * 发布行程
+ */
 app.post('/car/settrip',function(request,reply){
     mongoDo.tripModel.create(request.body, function (err,docs) {   
         if(err) {
@@ -23,17 +26,56 @@ app.post('/car/settrip',function(request,reply){
     })
    
 })
+/**
+ *修改行程
+ */
+app.post('/car/updatetrip', function (request, reply) {
+    console.log(request.body)
+    mongoDo.tripModel.update({_id:request.body._id},request.body, function (err, docs) {
+        if (err) {
+            reply.send(err)
+        }
+        reply.send({ result: true })
+    })
+
+})
+/**
+ * 获取行程
+ */
 app.get('/car/gettrip', function (request, reply){
-    console.log(request.query)
-    mongoDo.tripModel.find({ creatTime: { $lt: Number(request.query.now) } }, null, { skip: Number(request.query.currentIndex),limit:10},function(err,docs){
+    let params = {}
+    if (request.query.startAddress) {
+        params.startAddress = reg(request.query.startAddress)
+    } else if (request.query.endAddress) {
+        params.endAddress = reg(request.query.endAddress)
+    }
+    params.creatTime = {
+        $lt: Number(request.query.now)
+    }
+    mongoDo.tripModel.find(params, null, {
+                skip: Number(request.query.currentIndex) * 10,
+                limit: 10
+            }, function (err, docs) {
         if(err){
             reply.send(err)
         }
-        reply.send(docs)
+        if(docs.length>0){
+            reply.status(200).send({
+                result: true,
+                data: docs
+            })
+        }else{
+            reply.status(200).send({
+                result: false
+            })
+        }
+        
     })
    
 })
-
+/**
+ * 通过手机好吗获取已经发布行程
+ */
 app.get('/car/gettripByPhone', function (request, reply) {
     mongoDo.tripModel.find({ accountId: request.query.accountId}, function (err, docs) {
         if (err) {
@@ -44,8 +86,10 @@ app.get('/car/gettripByPhone', function (request, reply) {
     })
 
 })
+/**
+ * 判断是否已经登陆
+ */
 app.get('/isLogin', function (request, reply) {
-    console.log(request.query)
     mongoDo.accountModel.find({ _id: request.query.accountId}, function (err, docs) {
         if (err) {
             reply.send(err)
@@ -55,7 +99,9 @@ app.get('/isLogin', function (request, reply) {
     })
 
 })
-
+/**
+ * 注册
+ */
 app.post('/resign', function(request, reply) {
     mongoDo.accountModel.find({ num: request.body.num }, function (err, docs){
         console.log(err,docs)
@@ -72,6 +118,10 @@ app.post('/resign', function(request, reply) {
     })
     
 })
+/**
+ * 
+ * 登陆
+ */
 app.post('/login',function(request,reply){
     mongoDo.accountModel.find(request.body,function(err,docs){
         if(err) {
@@ -85,6 +135,9 @@ app.post('/login',function(request,reply){
         }
     })
 })
+/**
+ * 删除行程
+ */
 app.post('/deleteTrip', function (request, reply) {
     mongoDo.tripModel.findByIdAndRemove(request.body.id, function (err, docs) {
         if (err) {
@@ -97,4 +150,27 @@ app.post('/deleteTrip', function (request, reply) {
         }
     })
 })
+/**
+ * 模糊搜索相关形成
+ */
+app.get('/address/about', function (request, reply) {
+    let params ={}
+    if (request.query.startAddress) {
+        params.startAddress = reg(request.query.startAddress)
+    } else if (request.query.endAddress) {
+        params.endAddress = reg(request.query.endAddress)
+    }
+    mongoDo.tripModel.find(params,null,{limit:20}, function (err, docs) {
+        if (err) {
+            reply.send(err)
+        }
+        if (docs) {
+            reply.send({ result: true ,list:docs})
+        } 
+    })
+})
+
+function reg (str) {
+ return new RegExp(str)
+}
 module.exports = app
