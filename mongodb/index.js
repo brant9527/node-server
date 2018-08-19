@@ -1,7 +1,15 @@
 // const MongoClient = require('mongodb').MongoClient
 let mongoose = require('mongoose')
-let url = "mongodb://localhost:27017/runoob";
-let db = mongoose.connect(url)
+let url = "mongodb://127.0.0.1:27017/runoob";
+let db = mongoose.connect(url, {
+    useNewUrlParser: true
+},function(err){
+    if(err){
+        console.log('数据库链接失败')
+    } else {
+        console.log('数据库连接成功')
+    }
+})
 
 let mongoDo = {}
 let tripScheme = new mongoose.Schema({
