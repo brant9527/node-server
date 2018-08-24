@@ -44,14 +44,16 @@ app.post('/car/updatetrip', function (request, reply) {
  */
 app.get('/car/gettrip', function (request, reply){
     let params = {}
+    console.log(request.query)
     if (request.query.startAddress) {
         params.startAddress = reg(request.query.startAddress)
     } else if (request.query.endAddress) {
         params.endAddress = reg(request.query.endAddress)
-    }
+    } 
     params.creatTime = {
         $lt: Number(request.query.now)
     }
+    params.roleValue = request.query.roleValue
     mongoDo.tripModel.find(params, null, {
                 skip: Number(request.query.currentIndex) * 10,
                 limit: 10
